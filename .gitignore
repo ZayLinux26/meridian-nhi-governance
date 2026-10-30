@@ -218,3 +218,27 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# ===== NHI Governance: never commit credentials or raw tenant data =====
+
+# Raw collector and assessment exports (only redacted samples go in docs/)
+output/
+
+# Certificates and private keys (MHP-Patient-Portal-API cert credential)
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*.crt
+
+# Local secrets and environment files
+.env
+*.env
+secrets*.json
+*.secret
+
+# PowerShell and macOS clutter
+*.ps1xml.bak
+.DS_Store
