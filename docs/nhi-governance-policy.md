@@ -32,6 +32,7 @@ Every NHI must have a named human owner accountable for its access and its crede
 - App registrations: at least one Entra owner assigned
 - Managed identities and Key Vault secrets: `owner` tag set
 - AD service accounts: owner recorded in the `description` attribute as `owner=<upn>`
+- User-type service accounts: owner set as the account's `manager` in Entra
 
 An NHI with no owner is treated as orphaned.
 
@@ -68,7 +69,16 @@ Preferred credentials, in order: managed identity, then certificate, then client
 | NHI-NC-01 | No owner assigned (orphaned) | High |
 | NHI-NC-02 | No sign-in activity in 90 days, or never signed in | Medium |
 | NHI-NC-03 | Managed identity attached to no resource and holding no role assignments | Medium |
-| NHI-NC-04 | AD service account enabled but has never logged on | Medium |
+| NHI-NC-04 | User-based AD service account enabled but has never logged on (gMSAs exempt) | Medium |
+
+Activity signal by plane:
+
+| NHI type | Activity rule | Signal |
+|---|---|---|
+| App registrations, user-type service accounts | NC-02 | Entra sign-in activity |
+| Managed identities | NC-03 | Resource attachment and role assignments |
+| AD service accounts | NC-04 | `lastLogonTimestamp` |
+| Key Vault secrets | None | No native usage signal; orphaned secrets are rotated and reassigned, not deleted |
 
 Lab calibration: the lab estate is new, so NC-02 flags any identity with no recorded sign-in at all. NHIs meant to be in use are exercised once during seeding.
 
